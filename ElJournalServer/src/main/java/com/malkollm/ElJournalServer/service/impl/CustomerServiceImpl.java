@@ -7,6 +7,8 @@ import com.malkollm.ElJournalServer.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
@@ -35,5 +37,16 @@ public class CustomerServiceImpl implements CustomerService {
 
         return customerRepository.save(customer);
 
+    }
+
+    @Override
+    public List<Customer> getAllList() {
+        return customerRepository.findAll();
+    }
+
+    @Override
+    public void delete(int id) {
+        Customer customer = getById(id);
+        customerRepository.delete(customer);
     }
 }
