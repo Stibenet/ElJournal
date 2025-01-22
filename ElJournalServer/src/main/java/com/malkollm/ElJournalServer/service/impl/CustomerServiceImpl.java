@@ -22,4 +22,18 @@ public class CustomerServiceImpl implements CustomerService {
     public Customer getById(int id) {
         return customerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Customer", id));
     }
+
+    @Override
+    public Customer update(int id, Customer request) {
+        Customer customer = getById(id);
+
+        customer.setCustomerLocalName(request.getCustomerLocalName());
+        customer.setCustomerEmail(request.getCustomerEmail());
+        customer.setCustomerPhone(request.getCustomerPhone());
+        customer.setCustomerAddress(request.getCustomerAddress());
+        customer.setCustomerEnglishName(request.getCustomerEnglishName());
+
+        return customerRepository.save(customer);
+
+    }
 }
