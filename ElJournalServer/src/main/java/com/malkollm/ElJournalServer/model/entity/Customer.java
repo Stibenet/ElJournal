@@ -9,7 +9,7 @@ import lombok.Data;
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @Column(name = "customer_local_name", length = 150)
     private String customerLocalName;

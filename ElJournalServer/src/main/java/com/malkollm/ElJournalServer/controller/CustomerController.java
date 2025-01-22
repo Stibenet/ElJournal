@@ -4,10 +4,7 @@ import com.malkollm.ElJournalServer.model.entity.Customer;
 import com.malkollm.ElJournalServer.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -18,6 +15,12 @@ public class CustomerController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody Customer request) {
         Customer customer = customerService.create(request);
+        return ResponseEntity.ok(customer);
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<?> getById(@PathVariable int id) {
+        Customer customer = customerService.getById(id);
         return ResponseEntity.ok(customer);
     }
 }

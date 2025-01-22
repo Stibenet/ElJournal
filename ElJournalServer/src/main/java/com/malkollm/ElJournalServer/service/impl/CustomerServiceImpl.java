@@ -1,5 +1,6 @@
 package com.malkollm.ElJournalServer.service.impl;
 
+import com.malkollm.ElJournalServer.exception.ResourceNotFoundException;
 import com.malkollm.ElJournalServer.model.entity.Customer;
 import com.malkollm.ElJournalServer.repository.CustomerRepository;
 import com.malkollm.ElJournalServer.service.CustomerService;
@@ -15,5 +16,10 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer create(Customer request) {
         return customerRepository.save(request);
+    }
+
+    @Override
+    public Customer getById(int id) {
+        return customerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Customer", id));
     }
 }
