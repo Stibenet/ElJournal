@@ -1,12 +1,15 @@
 package com.malkollm.ElJournalServer.controller;
 
+import com.malkollm.ElJournalServer.model.dto.PageDto;
 import com.malkollm.ElJournalServer.model.entity.Customer;
 import com.malkollm.ElJournalServer.service.CustomerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
@@ -42,5 +45,12 @@ public class CustomerController {
     public ResponseEntity<?> deleteById(@PathVariable int id) {
         customerService.delete(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getAllPagination(@RequestParam Map<String, String> params) {
+        Page<Customer> allPagination = customerService.getAllPagination(params);
+        PageDto pageDto = new PageDto(allPagination);
+        return ResponseEntity.ok(pageDto);
     }
 }

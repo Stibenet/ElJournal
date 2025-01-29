@@ -4,10 +4,15 @@ import com.malkollm.ElJournalServer.exception.ResourceNotFoundException;
 import com.malkollm.ElJournalServer.model.entity.Customer;
 import com.malkollm.ElJournalServer.repository.CustomerRepository;
 import com.malkollm.ElJournalServer.service.CustomerService;
+import com.malkollm.ElJournalServer.service.util.PageUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -49,5 +54,24 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer = getById(id);
         customer.setDeleted(true);
         customerRepository.save(customer);
+    }
+
+    @Override
+    public Page<Customer> getAllPagination(Map<String, String> params) {
+        int pageLimit = PageUtil.DEFAULT_PAGE_LIMIT;
+        if (params.containsKey(PageUtil.PAGE_LIMIT)) {
+            pageLimit = Integer.parseInt(params.get(PageUtil.PAGE_LIMIT));
+        }
+
+        int pageNumber = PageUtil.DEFAULT_PAGE_NUMBER;
+        if (params.containsKey(PageUtil.PAGE_NUMBER)) {
+            pageNumber = Integer.parseInt(params.get(PageUtil.PAGE_NUMBER));
+        }
+
+        Pageable pageable = PageUtil.getPageable(pageNumber, pageLimit);
+
+        Page<Customer> customer = customerRepository.findByIsDeletedFalseOrderByIdDesc(pageable);
+
+        return customer;
     }
 }
