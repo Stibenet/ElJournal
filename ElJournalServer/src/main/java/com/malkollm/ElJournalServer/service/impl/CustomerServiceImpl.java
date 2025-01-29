@@ -22,7 +22,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer getById(int id) {
-        return customerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Customer", id));
+        return customerRepository.findByIdAndIsDeletedFalse(id).orElseThrow(() -> new ResourceNotFoundException("Customer", id));
     }
 
     @Override
@@ -41,12 +41,13 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<Customer> getAllList() {
-        return customerRepository.findAll();
+        return customerRepository.findByIsDeletedFalseOrderByIdDesc();
     }
 
     @Override
     public void delete(int id) {
         Customer customer = getById(id);
-        customerRepository.delete(customer);
+        customer.setDeleted(true);
+        customerRepository.save(customer);
     }
 }
