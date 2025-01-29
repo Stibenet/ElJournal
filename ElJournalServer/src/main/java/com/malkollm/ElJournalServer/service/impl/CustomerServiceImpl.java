@@ -1,7 +1,9 @@
 package com.malkollm.ElJournalServer.service.impl;
 
 import com.malkollm.ElJournalServer.exception.ResourceNotFoundException;
+import com.malkollm.ElJournalServer.mapper.Mapper;
 import com.malkollm.ElJournalServer.model.entity.Customer;
+import com.malkollm.ElJournalServer.model.response.CustomerResponse;
 import com.malkollm.ElJournalServer.repository.CustomerRepository;
 import com.malkollm.ElJournalServer.service.CustomerService;
 import com.malkollm.ElJournalServer.service.util.PageUtil;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -45,8 +48,9 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<Customer> getAllList() {
-        return customerRepository.findByIsDeletedFalseOrderByIdDesc();
+    public List<CustomerResponse> getAllList() {
+        return customerRepository.findByIsDeletedFalseOrderByIdDesc().stream()
+                .map(Mapper::toDto).collect(Collectors.toList());
     }
 
     @Override
@@ -57,7 +61,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Page<Customer> getAllPagination(Map<String, String> params) {
+    public Page<CustomerResponse> getAllPagination(Map<String, String> params) {
         int pageLimit = PageUtil.DEFAULT_PAGE_LIMIT;
         if (params.containsKey(PageUtil.PAGE_LIMIT)) {
             pageLimit = Integer.parseInt(params.get(PageUtil.PAGE_LIMIT));
@@ -70,7 +74,8 @@ public class CustomerServiceImpl implements CustomerService {
 
         Pageable pageable = PageUtil.getPageable(pageNumber, pageLimit);
 
-        Page<Customer> customer = customerRepository.findByIsDeletedFalseOrderByIdDesc(pageable);
+        Page<CustomerResponse> customer = customerRepository.findByIsDeletedFalseOrderByIdDesc(pageable)
+                .map(Mapper::toDto);
 
         return customer;
     }

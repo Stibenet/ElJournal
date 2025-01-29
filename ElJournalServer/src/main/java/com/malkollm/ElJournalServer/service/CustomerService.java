@@ -1,6 +1,7 @@
 package com.malkollm.ElJournalServer.service;
 
 import com.malkollm.ElJournalServer.model.entity.Customer;
+import com.malkollm.ElJournalServer.model.response.CustomerResponse;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -13,9 +14,9 @@ public interface CustomerService {
 
     Customer update(int id, Customer request);
 
-    List<Customer> getAllList();
+    List<CustomerResponse> getAllList();
 
     void delete(int id);
 
-    Page<Customer> getAllPagination(Map<String, String> params);
+    Page<CustomerResponse> getAllPagination(Map<String, String> params);
 }
