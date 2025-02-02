@@ -1,7 +1,7 @@
 package com.malkollm.ElJournalServer.service.impl;
 
 import com.malkollm.ElJournalServer.exception.ResourceNotFoundException;
-import com.malkollm.ElJournalServer.mapper.Mapper;
+import com.malkollm.ElJournalServer.mapper.CustomerMapper;
 import com.malkollm.ElJournalServer.model.entity.Customer;
 import com.malkollm.ElJournalServer.model.response.CustomerResponse;
 import com.malkollm.ElJournalServer.repository.CustomerRepository;
@@ -9,7 +9,6 @@ import com.malkollm.ElJournalServer.service.CustomerService;
 import com.malkollm.ElJournalServer.service.util.PageUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +21,7 @@ import java.util.stream.Collectors;
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
+    private final CustomerMapper customerMapper;
 
     @Override
     public Customer create(Customer request) {
@@ -50,7 +50,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public List<CustomerResponse> getAllList() {
         return customerRepository.findByIsDeletedFalseOrderByIdDesc().stream()
-                .map(Mapper::toDto).collect(Collectors.toList());
+                .map(customerMapper::toDto).collect(Collectors.toList());
     }
 
     @Override
@@ -75,7 +75,7 @@ public class CustomerServiceImpl implements CustomerService {
         Pageable pageable = PageUtil.getPageable(pageNumber, pageLimit);
 
         Page<CustomerResponse> customer = customerRepository.findByIsDeletedFalseOrderByIdDesc(pageable)
-                .map(Mapper::toDto);
+                .map(customerMapper::toDto);
 
         return customer;
     }

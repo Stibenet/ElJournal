@@ -1,6 +1,6 @@
 package com.malkollm.ElJournalServer.controller;
 
-import com.malkollm.ElJournalServer.mapper.Mapper;
+import com.malkollm.ElJournalServer.mapper.CustomerMapper;
 import com.malkollm.ElJournalServer.model.dto.PageDto;
 import com.malkollm.ElJournalServer.model.entity.Customer;
 import com.malkollm.ElJournalServer.model.request.CustomerRequest;
@@ -20,12 +20,13 @@ import java.util.Map;
 @RequestMapping("customers")
 public class CustomerController {
     private final CustomerService customerService;
+    private final CustomerMapper customerMapper;
 
     @PostMapping
     public ResponseEntity<CustomerResponse> create(@Valid @RequestBody CustomerRequest request) {
-        Customer entity = Mapper.toEntity(request);
+        Customer entity = customerMapper.toEntity(request);
         Customer customer = customerService.create(entity);
-        CustomerResponse dto = Mapper.toDto(customer);
+        CustomerResponse dto = customerMapper.toDto(customer);
 
         return ResponseEntity.ok(dto);
     }
@@ -34,16 +35,16 @@ public class CustomerController {
     public ResponseEntity<CustomerResponse> getById(@PathVariable int id) {
         Customer customer = customerService.getById(id);
 
-        CustomerResponse dto = Mapper.toDto(customer);
+        CustomerResponse dto = customerMapper.toDto(customer);
 
         return ResponseEntity.ok(dto);
     }
 
     @PutMapping("{id}")
     public ResponseEntity<CustomerResponse> update(@PathVariable int id,@Valid @RequestBody CustomerRequest request) {
-        Customer entity = Mapper.toEntity(request);
+        Customer entity = customerMapper.toEntity(request);
         Customer update = customerService.update(id, entity);
-        CustomerResponse dto = Mapper.toDto(update);
+        CustomerResponse dto = customerMapper.toDto(update);
 
         return ResponseEntity.ok(dto);
     }
