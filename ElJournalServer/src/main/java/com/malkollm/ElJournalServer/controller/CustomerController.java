@@ -6,6 +6,7 @@ import com.malkollm.ElJournalServer.model.entity.Customer;
 import com.malkollm.ElJournalServer.model.request.CustomerRequest;
 import com.malkollm.ElJournalServer.model.response.CustomerResponse;
 import com.malkollm.ElJournalServer.service.CustomerService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class CustomerController {
     private final CustomerService customerService;
 
     @PostMapping
-    public ResponseEntity<CustomerResponse> create(@RequestBody CustomerRequest request) {
+    public ResponseEntity<CustomerResponse> create(@Valid @RequestBody CustomerRequest request) {
         Customer entity = Mapper.toEntity(request);
         Customer customer = customerService.create(entity);
         CustomerResponse dto = Mapper.toDto(customer);
@@ -39,7 +40,7 @@ public class CustomerController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<CustomerResponse> update(@PathVariable int id, @RequestBody CustomerRequest request) {
+    public ResponseEntity<CustomerResponse> update(@PathVariable int id,@Valid @RequestBody CustomerRequest request) {
         Customer entity = Mapper.toEntity(request);
         Customer update = customerService.update(id, entity);
         CustomerResponse dto = Mapper.toDto(update);
