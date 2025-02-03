@@ -62,7 +62,7 @@ public class CustomerController {
     }
 
     @GetMapping
-    public ResponseEntity<PageDto> getAllPagination(@RequestParam Map<String, String> params) {
+    public ResponseEntity<PageDto> getAllPagination(@RequestParam(required = false) Map<String, String> params) {
         Page<CustomerResponse> allPagination = customerService.getAllPagination(params);
         PageDto pageDto = new PageDto(allPagination);
         return ResponseEntity.ok(pageDto);
